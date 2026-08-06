@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --shell-pad: clamp(1.25rem, 5vw, 4rem);
+  }
+
+  * {
+    @apply border-ash-600;
+  }
+
+  html {
+    /* Parallax relies on the window scroller; smooth-scroll fights rAF interpolation. */
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+    /* useScroll measures section offsets against the scroll *container*, which
+       for a window scroller is <html>. A static container makes those offsets
+       unreliable, so pin it — no offsets, so nothing moves, and `fixed`
+       descendants still resolve against the viewport, not this box. */
+    position: relative;
+    /* Contains parallax overshoot without creating a second scroll container.
+       `clip` is deliberate: `hidden` on either html or body makes that element
+       scrollable, and useScroll then measures the wrong scroller (its scrollTop
+       stays 0) so every layer freezes. Older engines fall back to hidden on
+       html, where the viewport scroller is unaffected. */
+    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  body {
+    @apply bg-void text-bone/85 antialiased;
+    /* Non-static so section offsets resolve against a real offsetParent. */
+    position: relative;
+  }
+
+  ::selection {
+    @apply bg-maroon text-void;
+  }
+
+  /* Display face is set wide-then-crushed: Archivo's expanded width at heavy
+     weight, with negative tracking pulling the counters tight. Reads as
+     stencilled signage rather than a default bold sans. */
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-black uppercase tracking-crush;
+    font-stretch: 112%;
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell;
+    padding-inline: var(--shell-pad);
+  }
+
+  /* Promotes a layer to its own compositor layer so transforms never repaint. */
+  .gpu {
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+  }
+
+  /* Section markers: a workout genuinely is an ordered sequence, so the
+     numbering carries real information instead of decorating the layout. */
+  .set-label {
+    @apply flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.22em] text-maroon;
+  }
+
+  .set-label::before {
+    content: '';
+    @apply h-px w-8 bg-maroon/50;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[0.7rem] uppercase tracking-[0.24em] text-maroon;
+  }
+
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full bg-maroon
+      px-8 py-4 font-mono text-xs font-bold uppercase tracking-[0.16em] text-void
+      shadow-maroon transition-all duration-300 ease-out hover:-translate-y-0.5
+      hover:shadow-maroon-lg active:translate-y-0
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4
+      focus-visible:outline-maroon;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-full border
+      border-bone/15 bg-bone/[0.04] px-8 py-4 font-mono text-xs font-bold uppercase
+      tracking-[0.16em] text-bone/85 backdrop-blur-md transition-colors duration-300
+      hover:border-maroon/50 hover:text-maroon
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4
+      focus-visible:outline-bone/40;
+  }
+
+  /* Glass surface used by cards, the navbar, and the hero pass. */
+  .glass {
+    @apply border border-bone/[0.08] bg-bone/[0.035] backdrop-blur-xl;
+    box-shadow: inset 0 1px 0 0 rgb(246 241 242 / 0.06),
+      0 24px 60px -30px rgb(0 0 0 / 0.85);
+  }
+
+  /* Top + bottom vignette that welds sections into one continuous dark world. */
+  .edge-fade::before,
+  .edge-fade::after {
+    content: '';
+    @apply pointer-events-none absolute inset-x-0 z-20 h-32;
+  }
+
+  .edge-fade::before {
+    @apply top-0 bg-gradient-to-b from-void to-transparent;
+  }
+
+  .edge-fade::after {
+    @apply bottom-0 bg-gradient-to-t from-void to-transparent;
+  }
+
+  .grain {
+    @apply pointer-events-none absolute inset-0 z-10 opacity-[0.13] mix-blend-overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Signature: the gym floor shows through the letterforms. The maroon text
+     colour underneath is the fallback wherever background-clip:text is
+     unsupported. */
+  .video-type {
+    @apply relative text-maroon;
+  }
+
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    .video-type {
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Honour the OS setting: kill transforms, keep content legible and in flow. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .gpu {
+    will-change: auto;
+    transform: none !important;
+  }
+
+  .animate-marquee,
+  .animate-pulse-ring {
+    animation: none !important;
+  }
+}
