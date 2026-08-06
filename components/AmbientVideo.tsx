@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
+import { asset } from '@/lib/asset';
 
 /**
  * Ambient background video.
@@ -42,7 +43,7 @@ export default function AmbientVideo({
   const [active, setActive] = useState(eager);
   const [ready, setReady] = useState(false);
 
-  const poster = `/media/${name}-poster.jpg`;
+  const poster = asset(`/media/${name}-poster.jpg`);
 
   useEffect(() => {
     if (prefersReducedMotion || active) return;
@@ -124,16 +125,16 @@ export default function AmbientVideo({
             <>
               <source
                 media="(max-width: 768px)"
-                src={`/media/${name}-720.webm`}
+                src={asset(`/media/${name}-720.webm`)}
                 type="video/webm"
               />
               <source
                 media="(max-width: 768px)"
-                src={`/media/${name}-720.mp4`}
+                src={asset(`/media/${name}-720.mp4`)}
                 type="video/mp4"
               />
-              <source src={`/media/${name}-1280.webm`} type="video/webm" />
-              <source src={`/media/${name}-1280.mp4`} type="video/mp4" />
+              <source src={asset(`/media/${name}-1280.webm`)} type="video/webm" />
+              <source src={asset(`/media/${name}-1280.mp4`)} type="video/mp4" />
             </>
           )}
         </video>

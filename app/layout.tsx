@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Archivo, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import Navbar from '@/components/Navbar';
+import { asset } from '@/lib/asset';
 import './globals.css';
 
 /* Display: Archivo carries a variable width axis, which is what lets the
@@ -50,7 +51,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     images: [
       {
-        url: '/media/strength-poster.jpg',
+        url: asset('/media/strength-poster.jpg'),
         width: 1280,
         height: 720,
         alt: 'A member training on the leg press at Fitmaxim',
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Fitmaxim — Transform Your Body, Elevate Your Life',
     description: 'Modern equipment, qualified trainers, zero contracts.',
-    images: ['/media/strength-poster.jpg'],
+    images: [asset('/media/strength-poster.jpg')],
   },
   robots: { index: true, follow: true },
 };

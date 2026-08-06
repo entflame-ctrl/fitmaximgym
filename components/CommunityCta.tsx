@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowIcon } from './icons';
+import { asset } from '@/lib/asset';
 
 /**
  * Signature element: the headline is a window onto the gym floor.
@@ -54,7 +55,7 @@ export default function CommunityCta() {
         {prefersReducedMotion ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src="/media/machines-poster.jpg"
+            src={asset('/media/machines-poster.jpg')}
             alt=""
             className="h-full w-full object-cover"
             loading="lazy"
@@ -67,13 +68,13 @@ export default function CommunityCta() {
             playsInline
             autoPlay
             preload="none"
-            poster="/media/machines-poster.jpg"
+            poster={asset('/media/machines-poster.jpg')}
             className="h-full w-full object-cover"
           >
             {active && (
               <>
-                <source src="/media/machines-1280.webm" type="video/webm" />
-                <source src="/media/machines-1280.mp4" type="video/mp4" />
+                <source src={asset('/media/machines-1280.webm')} type="video/webm" />
+                <source src={asset('/media/machines-1280.mp4')} type="video/mp4" />
               </>
             )}
           </video>

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CloseIcon } from './icons';
+import { asset } from '@/lib/asset';
 
 /**
  * Accessible video lightbox.
@@ -110,11 +111,11 @@ export default function VideoModal({
               autoPlay
               loop
               playsInline
-              poster={`/media/${name}-poster.jpg`}
+              poster={asset(`/media/${name}-poster.jpg`)}
               className="aspect-video w-full bg-void"
             >
-              <source src={`/media/${name}-1280.webm`} type="video/webm" />
-              <source src={`/media/${name}-1280.mp4`} type="video/mp4" />
+              <source src={asset(`/media/${name}-1280.webm`)} type="video/webm" />
+              <source src={asset(`/media/${name}-1280.mp4`)} type="video/mp4" />
             </video>
 
             <p className="border-t border-bone/[0.08] px-6 py-4 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-bone/45">
